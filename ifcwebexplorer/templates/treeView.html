@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+    *{
+        border:0;
+        padding:0;
+        margin:0;
+        list-style:none;
+    }
+    body{
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+    button {
+        width: 20px;
+        height: 20px;
+    }
+    #ul0>li{
+        
+    }
+    #ul0>li>span{
+        position: absolute;
+        left: 7px;
+        top: -10px;
+  
+    }
+    #ul0>li>div{
+        position: relative;
+        left: 12px;
+    }
+    
+    .ul_n>li>span{
+        position: absolute;
+        left: 50px;
+        top: -10px;
+    }
+    .ul_n>li>div{
+        position: relative;
+        left: 55px;
+
+    }
+    
+    li {
+        position:relative;
+        line-height:40px
+    }
+</style>
+</head>
+<script type= "text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.3.min.js') }}"></script>
+<body style="background-color:#172A88;color:white;">
+        <h1><button type="button"  id = "B0" clickCount = "0" style = "position:relative;bottom:5px;">+</button><span>{{session['filename']}} [{{session['schemaName']}}]: {{session['entityType']}}</span></h1><!--session在前端直接用session[]取值-->
+</body>
+</html>
+<script>
+    //var patt1=new RegExp("(\{[A-Za-z0-9]+\})","g");
+    //var a = patt1.exec("{123},{ABC}")
+    //while(a){
+        //console.log(a)
+        //a = patt1.exec("{123},{ABC}")
+    //}
+    //var a = patt1.exec("{123},{ABC}")
+    //console.log(a)
+    //a = patt1.exec("{123},{ABC}")
+    //console.log(a)
+    //var a = /{}/g.exec("{},{}")
+    //console.log(a)
+    //a = /({})/.exec("{},abcc.,,.,{}")
+    //console.log(a)
+    
+    //var b = "{},avcddd,{}".match(/{}/g)
+    //console.log(b)
+    
+    //var patt1=new RegExp("e",'g');
+    //console.log(patt1.exec("The best things in life are free"));
+    var content_left = "<li><span class = 'VerticalLine'>|</span><div class = 'content'>------<button type='button' clickCount = '0' class = 'B2'>+</button>"+ "<span>" 
+    var content_left_noButton = "<li><span class = 'VerticalLine'>|</span><div class = 'content'>------"+ "<span>" 
+    
+    var content_right = "</span></div></li>";
+    var content = ""
+    var count = 0
+    var endLiDict = {}
+    
+    $("body").on('click','button',function(e){
+        var selectBT = $(this)
+        var oldEndLiStr = ""
+        var newVerticalLines = ""//不是最后一个li时要多加的竖线集合字符串
+        if(selectBT.attr("id") != "B0"){
+            $(this).siblings("span:eq(0)").css("color","red");
+        }
+        //$(this).siblings("span:eq(0)").css("color","red");
+        
+        //在count>0时,判断点的li是不是最后一个，决定加不加前面的竖线|
+        
+        if(count != 0){
+            
+            oldEndLiStr = selectBT.parent().parent().attr("endLiStr")//这是上一级(父级)的最后li字符序列
+            
+            var basicDistance = -5//前面要多加一个竖线|;是1的话要多加一段距离
+            for(var i = 0; i < oldEndLiStr.length; i++){
+                //是0代表不是最后一个li，前面要多加一个竖线|;是1的话要多加一段距离
+                if(oldEndLiStr[i] == '1'){
+                    basicDistance-=55
+                }else{
+                    var newVerticalLine = "<span class = 'VerticalLine' style = 'position:absolute;top:-10px;left:" + basicDistance + "px" + "'>|</span>"
+                    basicDistance-=55
+                    newVerticalLines += newVerticalLine
+                }
+            }
+            //var isLast = selectBT.parent().is(':last-child')
+            //isLastList.push(isLast)
+        }
+        
+        //var endLi = false
+        //var endLi = selectBT.parent().parent().is(':last-child')
+        //isLastList.push(isLast)
+        
+        
+        //if(count != 0){
+            //var isLast = selectBT.parent().is(':last-child')
+            //isLastList.push(isLast)
+        //}
+        
+        //var brokenLine = ""
+        //var lastLength = 0
+        //for(var i = 0; i < isLastList.length; i++){
+            //var isLast = isLastList[i]
+            //if(isLast == false){
+                ////isLast有几个false,就读加几组折线
+                //lastLength += 1 
+                //var indent = 49-lastLength*4 + 57*(lastLength-1) //49
+                //brokenLine += "<span>|</span>"
+                ////brokenLine += "<span style = 'position:relative;bottom:8px;right:" + indent + "px;'>|</span>"
+            //}
+            
+        //}
+        //if(selectBT.parent().attr("id") == "L0" && isLast == false){
+            //brokenLine = "<span style = 'position:relative;bottom:8px;right:" + 49 + "px;'>|</span>"
+        //}
+        //brokenLine += "<span style = 'position:relative;bottom:8px;'>|</span>------"
+        brokenLine = ""
+        //Number of clicks
+        var clickCount = parseInt(selectBT.attr("clickCount"))
+        clickCount++
+        //alert(clickCount)
+        selectBT.attr("clickCount",clickCount)//update Number of clicks
+        //alert(selectBT.attr("clickCount"))
+        if(clickCount == 1){//If you click the button for the first time, you will query the information to be displayed
+            $(this).text("-");
+            textName = $(this).next().text();
+            var data={"textName":textName};
+            if(/.*? = \(\d*?\)/.test(textName)){//Determine attribute name = (set length)
+                var attrEntityNameAndID = $(this).parent().parent().parent().siblings("span").eq(0).text();//Gets the value of the first span
+                data["attrEntityNameAndID"] = attrEntityNameAndID;
+            }
+            if(/INV:/.test(textName)){//Determine INV: InvType
+                var invEntityNameAndID = $(this).parent().parent().parent().siblings("span").eq(0).text();//Gets the value of the second span
+                //alert(invEntityNameAndID)
+                data["invEntityNameAndID"] = invEntityNameAndID;
+            }
+            if(/.*? \(#\d*?\)/.test(textName)){//Determine the object name (# number)
+                var spanValue = $(this).parent().parent().parent().siblings("span").eq(0).text();//Gets the value of the second span
+                //alert(invEntityNameAndID)
+                if(/INV:/.test(spanValue)){
+                    data["invType"] = /INV: (.*?)\(/.exec(spanValue)[1]
+                    data["entityNameAndID"] = $(this).parent().parent().parent().parent().parent().parent().siblings("span").eq(0).text();//Gets the value of the second span
+                }
+                
+            }
+            if(count == 0){
+                selectBT.parent().after("<ul style = 'width:10000px;height:10000px' id = 'ul0'></ul>");
+                //selectBT.parent().parent().append("<ul style = 'position:relative;" + "bottom:" + "-5" + "px;" + "left:" + 9 + "px;'></ul>");//14
+
+            }else{
+                //var lastLength = 0
+                //for(var i = 0; i < isLastList.length; i++){
+                    //var isLast = isLastList[i]
+                    //if(isLast == false){
+                        ////isLast有几个false,就读加几组折线
+                        //lastLength += 1
+                    //}
+                                    
+                //}
+                //var indent = 14 - 54*lastLength
+                if(true){//selectBT.parent().attr("id") == "L0"
+                    selectBT.parent().append("<ul class = 'ul_n'></ul>");//14
+                }else{
+                    selectBT.parent().append("<ul style = 'position:relative;" + "bottom:" + "-5" + "px;" + "left:" + 14 + "px;'></ul>");//14
+                }
+            }
+            $.ajax({
+                    type: 'POST',
+                    url:"/treeView",
+                    data:JSON.stringify(data),  
+                    dataType: 'json',
+                    contentType: 'application/json; charset=UTF-8',
+                    success:function(data){ 
+                        //data = $.parseJSON(data)
+                        if(count == 0){
+                            $.each(data.entityIDList,function(i,entityID){
+                                //var endLi = false//最后
+                                //if(i == data.entityIDList.length-1){
+                                //}
+                                content = "<li id = 'L0'>"+
+                                            "<span class = 'VerticalLine'>|</span><div class = 'content'>------<button type='button' clickCount = '0' class = 'B2'>+</button>"+ "<span>" + data.entityName + " (#" + entityID + ")" + "</span></div>" + "</li>";
+                                //selectBT.parent().after(content)
+                                $(selectBT.parent().siblings("ul:first").get(0)).append(content);
+                                if(i == data.entityIDList.length-1){//最后一个li设成1,否则设成0
+                                    $(selectBT.parent().siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1")
+                                }else{
+                                    $(selectBT.parent().siblings("ul:first").get(0)).children("li:last").attr("endLiStr","0")
+                                }
+                                
+                            })
+                            count += 1
+                        }
+                        else if(/.*? \(#\d*?\)/.test(textName)){//Determine the object name (# number)
+                            var invList = data.invList
+                            if(invList.length == 0 || invList == null){
+                                //if the higher level of the button clicked is inv:invType(number),show an inv attribute
+                                if(data.invAttr != null){
+                                    content =  content_left + data.invAttr + content_right
+                                    //content = "<li style = 'list-style:none;'>"+
+                                                    //"<span style = 'position:relative;bottom:8px;'>|</span>------<button type='button' clickCount = '0'>+</button>"+ "<span>" + data.invAttr + "</span>" + "</li>";
+                                    $(selectBT.siblings("ul:first").get(0)).append(content);
+                                    //必然最后一个？
+                                    $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1"+oldEndLiStr)
+                                    //更新竖线
+                                    $(selectBT.siblings("ul:first").get(0)).children("li").append(newVerticalLines)//所有li加多的竖线
+                                }
+                                else{
+                                    var j = 0
+                                    $.each(data.entityAttributes,function(attrName,attrValue){
+                                    
+                                    if(/^\(\d*?\)$/.test(attrValue) || /&lt.*?:#\d*?&gt/.test(attrValue)){
+                                        content =  content_left + (attrName + " = " + attrValue) + content_right
+                                        //content = "<li style = 'list-style:none;'>"+ brokenLine +
+                                                    //"<button type='button' clickCount = '0'>+</button>"+ "<span>" + attrName + " = " + attrValue + "</span>" + "</li>";
+                                    }
+                                    else{
+                                        content =  content_left_noButton + (attrName + " = " + attrValue) + content_right
+                                        
+                                        //content = "<li style = 'list-style:none;'>"+ brokenLine +
+                                                     //"<span>" + attrName + " = " + attrValue + "</span>" + "</li>";
+                                    }
+                                    $(selectBT.siblings("ul:first").get(0)).append(content);
+                                    //循环内设置endLiStr
+                                    if(j == Object.keys(data.entityAttributes).length-1){//最后一个li设成1加旧的,否则设成0加旧的
+                                        $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1"+oldEndLiStr)
+                                    }else{
+                                        $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","0"+oldEndLiStr)
+                                    }
+                                    j+=1
+                                    
+                                })
+                                //循环后更新竖线
+                                    $(selectBT.siblings("ul:first").get(0)).children("li").append(newVerticalLines)//所有li加多的竖线
+                                }
+                            }
+                            else{
+                                content =  content_left + textName + content_right
+                                $(selectBT.siblings("ul:first").get(0)).append(content)
+                                //这个必然不是最后一个
+                                $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","0"+oldEndLiStr)
+                                //$(selectBT.siblings("ul:first").get(0)).append("<li style = 'list-style:none;' >"+ brokenLine +
+                                                //"<button type='button' clickCount = '0'>+</button>"+ "<span>" + textName + "</span>" + "</li>");
+                                $.each(data.invList,function(i,value){
+                                    content =  content_left + value + content_right
+                                    //content = "<li>"+
+                                            //"<span class = 'VerticalLine'>|</span><div class = 'content'>------<button type='button' clickCount = '0' class = 'B2'>+</button>"+ "<span>" + value + "</span></div>" + "</li>";
+                                    //content = "<li style = 'list-style:none;'>"+ brokenLine +
+                                                //"<button type='button' clickCount = '0'>+</button>"+ "<span>" + value + "</span>" + "</li>";
+                                    $(selectBT.siblings("ul:first").get(0)).append(content);
+                                    if(i == data.invList.length-1){//最后一个li设成1加旧的,否则设成0加旧的
+                                        $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1"+oldEndLiStr)
+                                    }else{
+                                        $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","0"+oldEndLiStr)
+                                    }
+                                })
+                                $(selectBT.siblings("ul:first").get(0)).children("li").append(newVerticalLines)//所有li加多的竖线
+                            }
+                            
+                        }
+                        else if(/.*? = <.*?:#\d*?>/.test(textName)){//Determine the attribute name = < attribute object name >
+                                content =  content_left + (data.entityName + " (" + data.entityID + ")") + content_right
+                                //content = "<li style = 'list-style:none;'>"+ brokenLine +
+                                            //"<button type='button' clickCount = '0'>+</button>"+ "<span>" + data.entityName + " (" + data.entityID + ")" + "</span>" + "</li>";
+                                $(selectBT.siblings("ul:first").get(0)).append(content);
+                                //必然最后一个？
+                                $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1"+oldEndLiStr)
+                                //更新竖线
+                                $(selectBT.siblings("ul:first").get(0)).children("li").append(newVerticalLines)//所有li加多的竖线
+                                
+                        }
+                        else if(/.*? = \(\d*?\)/.test(textName)){//Determine attribute name = (set length)
+                            var j = 0
+                            $.each(data.attrDict,function(entityID,entityName){
+								content = ""
+								if(/^\d+$/.test(entityID)){
+                                    content =  content_left + (entityName + " (#" + entityID + ")") + content_right
+									//content = "<li style = 'list-style:none;'>"+
+                                         //"<span style = 'position:relative;bottom:8px;'>|</span>------<button type='button' clickCount = '0'>+</button>"+ "<span>" + entityName + " (#" + entityID + ")" + "</span>" + "</li>";
+                                } 
+                                else{
+                                    content =  content_left_noButton + (entityID + " = " + entityName) + content_right
+									//content = "<li style = 'list-style:none;'>"+
+                                                    //"<span style = 'position:relative;bottom:8px;'>|</span>------"+ "<span>" + entityID + " = " + entityName + "</span>" + "</li>";
+								}
+                                $(selectBT.siblings("ul:first").get(0)).append(content);
+                                
+                                //循环内设置endLiStr
+                                if(j == Object.keys(data.attrDict).length-1){//最后一个li设成1加旧的,否则设成0加旧的
+                                    $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1"+oldEndLiStr)
+                                }else{
+                                    $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","0"+oldEndLiStr)
+                                }
+                                j+=1
+                                
+                            })
+                            //循环后更新竖线
+                            $(selectBT.siblings("ul:first").get(0)).children("li").append(newVerticalLines)//所有li加多的竖线
+     
+                        }
+                        else if(/INV:/.test(textName)){//Determine INV: InvType
+                            var j = 0
+                            $.each(data.inverseEntitiesDict,function(entityID,entityName){		
+                                content =  content_left + (entityName + " (#" + entityID + ")") + content_right			
+								//content = "<li style = 'list-style:none;'>"+
+										//"<span style = 'position:relative;bottom:8px;'>|</span>------<button type='button' clickCount = '0'>+</button>"+ "<span>" + entityName + " (#" + entityID + ")" + "</span>" + "</li>";
+                                
+                                $(selectBT.siblings("ul:first").get(0)).append(content);
+                                
+                                //循环内设置endLiStr
+                                if(j == Object.keys(data.inverseEntitiesDict).length-1){//最后一个li设成1加旧的,否则设成0加旧的
+                                    $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","1"+oldEndLiStr)
+                                }else{
+                                    $(selectBT.siblings("ul:first").get(0)).children("li:last").attr("endLiStr","0"+oldEndLiStr)
+                                }
+                                j+=1
+                                
+                            })
+                            //循环后更新竖线
+                            $(selectBT.siblings("ul:first").get(0)).children("li").append(newVerticalLines)//所有li加多的竖线
+                            //$.each(data.inverseEntitiesDict,function(entityID,invValue){
+                                //content = "<li style = 'list-style:none;'>"+
+                                            //"<span style = 'position:relative;bottom:8px;'>|</span>------<button type='button' clickCount = '0'>+</button>"+ "<span>" + invValue + "</span>" + "</li>";
+                                //$(selectBT.siblings("ul:first").get(0)).append(content);
+                            //})
+                        }
+                    }
+            });
+        }
+        //If you click the button even numbers, hide the elements
+        else if(clickCount % 2 == 0){
+            $(this).text("+");
+            $(this).siblings("span:eq(0)").css("color","");
+            if(selectBT.parent().prop("nodeName") == "H1"){
+                selectBT.parent().siblings().hide();
+            }else{
+                selectBT.siblings("ul").hide();
+            }
+            
+        }
+        //If you click the button odd numbers,  show the elements
+        else{
+            $(this).text("-");
+            if(selectBT.attr("id") != "B0"){
+               
+                $(this).siblings("span:eq(0)").css("color","red");
+            }
+            
+            //$(this).css({"color":"red","font-weight":bold});
+            if(selectBT.parent().prop("nodeName") == "H1"){
+                selectBT.parent().siblings().show();
+            }else{
+                selectBT.siblings("ul").show();
+            }
+        }
+    })
+</script>
+

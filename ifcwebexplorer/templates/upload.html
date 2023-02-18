@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="codepixer">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Home</title>
+
+	<!--
+			Google Font
+			============================================= -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500i" rel="stylesheet">
+
+	<!--
+			CSS
+			============================================= -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/themify-icons/0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/linearicons.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script type= "text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.3.min.js') }}"></script>
+
+<style type="text/css">
+    label{
+            position: relative;
+        }
+        #fileinp{
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        #btn{
+            margin-right: 5px;
+        }
+        #text{
+            color: red;
+        }
+        #btn{
+            padding: 5px 10px;
+            background: #00b0f0;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+        }
+</style>
+</head>
+
+<body>
+
+	<!-- Start Header Area -->
+	
+	<!-- End Header Area -->
+
+
+	<!-- Start Banner Area -->
+	<section class="home-banner-area relative">
+		<div class="container" style = "position:relative;bottom:180px">
+			<div class="row fullscreen d-flex align-items-center justify-content-center">
+				<div class="banner-content col-lg-8 col-md-12">
+					<h1 class="wow fadeIn" data-wow-duration="4s">IfcWebExplorer</h1>
+					<p class="text-white" ><!--style = "position:relative;bottom:130px;left:440px;"-->
+						This is a tool for IFC data viewer using python Flask. 
+					</p>
+                    <form enctype="multipart/form-data" action="/upload" method="post">
+                            <label for="fileinp">
+                               <p style = "position:relative;right:50px;top:20px"><input type="file" name="filename" id ="fileinp" /><input type="button" id="btn" value="click here to upload an IFC file"></p>
+                               <p style = "position:relative;left:120px;bottom:15px"><input type="submit" value="search" /></p>
+                            </label>
+                        </form>
+<!--
+					<div class="input-wrap">
+						<form action="" class="form-box d-flex justify-content-between">
+							<input type="text" placeholder="Search Courses" class="form-control" name="username">
+							<button type="submit" class="btn search-btn">Search</button>
+						</form>
+					</div>
+-->
+                
+
+            
+				</div>
+			</div>
+		</div>
+		
+	</section>
+	<!-- End Banner Area -->
+
+
+	
+
+    <script src="{{ url_for('static', filename='js/vendor/jquery-2.2.4.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/easing.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/hoverIntent.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/superfish.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.ajaxchimp.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl-carousel-thumb.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.sticky.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/parallax.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.counterup.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+
+</body>
+<script>
+        
+        data = [1,2,3]
+
+        $.ajax({
+                    type: 'POST',
+                    url:"http://127.0.0.1:8088/",
+                    data:JSON.stringify(data),  
+                    dataType: 'json',
+                    contentType: 'application/json; charset=UTF-8',
+                    success:function(data){ 
+                        
+                        console.log(data)
+                    }
+                })   
+</script>
+</html>

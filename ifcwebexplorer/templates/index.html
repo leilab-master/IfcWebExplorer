@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    table,td {
+        border: 1px solid #3A5FCD;
+        border-style: double;
+        border-radius: 5px;
+    }
+</style>
+
+</head>
+<body style="background-color:#172A88;color:white;">
+    <p hidden="hidden" id = "time1">{{session["ifc"].time1}}</p>
+    <p hidden="hidden" id = "time2">{{session["ifc"].time2}}</p>
+    <script type= "text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.3.min.js') }}"></script>
+    <h1 style="text-align:center">{{session["ifc"].filename}}({{session["ifc"].schemaName}})</h1>
+    <h2 style="text-align:center">
+        <form action="/treeView" method="get" name="myform">
+            
+            <input type="text" hidden="hidden" name = "invText" value="123" id = "invText"/>
+            <span>Entity Type</span>
+            <input class="browsers" list="browsers" name = "dl">
+            <datalist id="browsers" >
+                {% for entityType in session["ifc"].EntityTypeList %}
+                    <option>{{entityType}}</option>
+                {% endfor %}
+            </datalist>
+            <span style="font-size:10px;">show INVERSE<input type="checkbox" id = "inv"  value="inv" /></span>
+            <input type="submit" id = "Search" value = "Search"/>
+        </form>        
+    </h2>
+    <h3 style="text-align:center">
+        <table   style = "margin:0 auto;"><!--border-collapse: collapse cellspacing="0" cellpadding="0"-->
+            <tr>
+                <td>parseTime</td>
+                <td>{{session["ifc"].time2}}</td>
+            </tr>
+            <tr>
+                <td>entities</td>
+                <td>{{session["ifc"].totalEntities}}</td>
+            </tr>
+            <tr>
+                <td>fileCreateTime</td>
+                <td>{{session["ifc"].fileCreateTime}}</td>
+            </tr>
+            <tr>
+                <td>bimSoft</td>
+                <td>{{session["ifc"].author}}</td>
+            </tr>
+    
+        </table>
+    </h3>
+<!--
+    <ul style="text-align:center;list-style-type:none">
+        {% for entityType in session["ifc"].EntityTypeList %}
+            <li><a href = "/treeView?entityType={{entityType}}&isInverse=0">{{entityType}}</a></li>
+        {% endfor %}
+    </ul>
+-->
+    <script>
+            if(sessionStorage.pagecount)
+            {
+                sessionStorage.pagecount=Number(sessionStorage.pagecount) +1;
+            }else{
+                sessionStorage.pagecount=1;
+                //alert("schema:" + $("#time1").html()+"s")
+                //alert("ifcfile:" + $("#time2").html()+"s")
+            }
+            $("a").click(function(){
+                if($("#inv").is(':checked')){
+                    var newHref = $(this).attr("href").substring(0,$(this).attr("href").length-1)+"1"
+                    //alert(newHref)
+                    $(this).attr("href",newHref)
+                    //alert($("this").attr("href",newHref))
+                }else{
+                    var newHref = $(this).attr("href").substring(0,$(this).attr("href").length-1)+"0"
+                    $(this).attr("href",newHref)
+                    //alert($("this").attr("href",newHref))
+                }
+            })
+            $("#Search").click(function(){
+                if($("#inv").is(':checked')){
+                    $("#invText").val("1")
+                }else{
+                    $("#invText").val("0")
+                }
+            })
+    </script>
+</body>
+</html>
+
