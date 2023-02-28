@@ -2,9 +2,9 @@
 
 Based on Python 3, Flask and JavaScript, IfcWebExplorer is a cross-platform IFC data viewer to look up the IFC attributes and relationships. IFC schema files are parsed using IfcOpenShell (http://www.ifcopenshell.org/). 
 
-If you are not familiar with python, you can download the IFCWEBEXPLORER.zip file and unzip it. There will be a “static” folder and a “server.exe” file. Then, double click the “server.exe” file and allow your computer to run this program. The details about how to use IfcWebExplorer are included in the manual file (how_to_use_IfcWebExplorer.pdf).
+If you are not familiar with python, you can download the IFCWEBEXPLORER.zip file and unzip it. There will be a “static” folder and a “server.exe” file. Then, double click the “server.exe” file to run it. The details about how to use IfcWebExplorer are included in the manual file (how_to_use_IfcWebExplorer.pdf).
 
-If you are familiar with python, you can download the source files in. The start file is “server.py”. 
+If you are familiar with python, you can download the source files. You can start from “server.py”.
 
 # Acknowledgement
 Special thanks to Mr. Marijn van Aerle, IfcWebExplorer started from the python code shared at the following github site.
