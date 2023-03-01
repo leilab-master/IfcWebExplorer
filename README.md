@@ -7,7 +7,7 @@ If you are not familiar with python, you can download the IFCWEBEXPLORER.zip fil
 If you are familiar with python, you can download the source files. You can start from “server.py”.
 
 # Acknowledgement
-Special thanks to Mr. Marijn van Aerle, IfcWebExplorer started from the python code shared at the following github site.
+Special thanks to Mr. Marijn van Aerle, we started this project from the python code shared at the following github site.
 https://github.com/mvaerle
 Also, we would like to thank Dr. Yoshinobu Adachi of buildingSMART Japan, IfcWebExplorer was developed referring to his IfcExplorer. 
 
